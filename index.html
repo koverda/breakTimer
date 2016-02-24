@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="script.js" type="text/javascript">
+		</script>
+	<title>Break Timer</title>
+	</head>
+
+	<body>
+
+		<form onsubmit="myFunction(); return false;">
+		timerLength: <input type="text" name="timerLength" value="10">
+		<br>
+		breakLength: <input type="text" name="breakLength" value="1">
+		<br>
+		<input type="submit" value="startTimer">
+		</form>
+
+		<div id="timerDisplay">
+			
+		</div>
+		<script type="text/javascript">
+			document.addEventListener('DOMContentLoaded', function () {
+			  if (Notification.permission !== "granted")
+			    Notification.requestPermission();
+			});
+
+		</script>
+
+	</body>
+</html>
