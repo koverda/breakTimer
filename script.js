@@ -1,5 +1,5 @@
   document.addEventListener("DOMContentLoaded", function(event) {
-    console.log("DOM fully loaded and parsed");
+    // console.log("DOM fully loaded and parsed");
     renderTimerForm();
   });
 
@@ -24,15 +24,22 @@ function startTimerFunction() {
 	var breakLength = parseInt(document.getElementsByName("breakLength")[0].value);
 
   clearTimerForm();
-  document.getElementById('timerDisplay').innerHTML = `workTime <br> <div id="timerDisplayClock">` + timerLength +`</div>`;
 
-  console.log(typeof timerLength);
-  console.log(typeof breakLength);
+  var intervalId;
+
+  document.getElementById('timerDisplay').innerHTML = 
+    `workTime <br> <div id="timerDisplayClock">` + timerLength +`</div>
+    <div id="actionButtons"><button id="pauseButton">Pause</button></div>`;
 
   var seconds_left = timerLength;
 
-	var interval = setInterval(function() {
+	var intervalId = window.setInterval(function() {
 	    document.getElementById('timerDisplayClock').innerHTML = --seconds_left;
+
+      document.getElementById("pauseButton").addEventListener("click", function(){
+          console.log("pause click");
+          clearInterval(intervalId);
+      });
 
 	    if (seconds_left <= 0)
 	    {
@@ -43,13 +50,17 @@ function startTimerFunction() {
               <input type="submit" value="restartTimer">
             </form>
             `;
-	        clearInterval(interval);
+	        clearInterval(intervalId);
 	        notifyMe();
 	    }
 	}, 1000);
 }
 
+function pauseCount(intervalId) {
+  window.clearInterval(intervalId);
+  console.log(intervalId);
 
+}
 
 function notifyMe() {
   if (!Notification) {
