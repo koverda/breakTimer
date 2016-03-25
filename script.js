@@ -10,7 +10,7 @@ document.getElementById('timerForm').innerHTML = `<form onsubmit="startTimerFunc
         <br>
         breakLength: <input type="text" name="breakLength" value="1">
         <br>
-        <input type="submit" value="startTimer">
+        <input type="submit" value="Start">
     </form>`;
 }
 
