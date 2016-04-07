@@ -7,16 +7,15 @@ I wrote this timer to help take stretch breaks at work.
 
 To Do
 =====
-- options 
-  - notifications toggle
-  - auto continue toggle
 - make it pretty
-- more notification types
+- more notification types 
+  - sound
+  - blink tab
 - host it
-- refactor for less repetition
 - cookie 
   - save timer settings
   - save time left
+- refactor for less repetition
 - suggestion box
 - donation box
 */
@@ -27,31 +26,53 @@ var breakLength = 0;
 var orginalTimerLength = 0;
 var originalBreakLength = 0;
 var timer = setInterval(function(){});
+var notifications = true;
+var closeWindowConfirmation = true;
+var autoContinue = false;
+
 
 // this is to prevent closing the window on accident
 window.onbeforeunload = function(e) {
+  if (closeWindowConfirmation)
+  {
     return 'You will lose your break timer! ';
+  }
 };
+
 
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
 
   timerLength = 0;
   breakLength = 0;
-
-  // request notification permissions
-  if (Notification.permission == "granted"){
-    console.log("notification permissions granted")
-  };
   
-  if (Notification.permission !== "granted"){
-    Notification.requestPermission();
-    console.log("requested permission for notifications");
-  };
+  if (notifications)
+  {
+    // request notification permissions
+    if (Notification.permission == "granted"){
+      console.log("notification permissions granted")
+    };
+    
+    if (Notification.permission !== "granted"){
+      Notification.requestPermission();
+      console.log("requested permission for notifications");
+    };
+  }
   
-    renderInitialState();
+renderOptions();
+renderInitialState();
     
 });
+
+function renderOptions(){
+    console.log("rendering options");
+    $("#options").html(`
+    Options <br>
+    <input id="cboxNotification" type="checkbox" ` + (notifications?"checked":"")  +` onchange="notifications=!notifications;"/> Desktop Notification <br>
+    <input id="cboxWindowClose"  type="checkbox" ` + (closeWindowConfirmation?"checked":"")  +` onchange="closeWindowConfirmation=!closeWindowConfirmation;"/> Close Window Confirmation <br>
+    <input id="cboxAutoContinue" type="checkbox" ` + (autoContinue?"checked":"")  +` onchange="autoContinue=!autoContinue;"/> Auto Continue <br>
+    `);
+}
 
 
 function renderInitialState() {
@@ -98,9 +119,17 @@ function renderActiveState() {
     if (timerLength == 0)
     {
       clearInterval(timer);
-      notifyMe("breakStart");
+      if (notifications)
+      {
+        notifyMe("breakStart");
+      }
       
       $("#timer").append(`<input type="button" id="continueTimerButton" value="Start Break">`);
+      
+      if(autoContinue)
+      {
+        renderBreakState();
+      }
       
       $("#continueTimerButton").click( function() { 
         renderBreakState();
@@ -165,8 +194,15 @@ $("#timer").html(`
     if (breakLength == 0)
     {
       clearInterval(timer);
+      if (notifications)
+      {
+        notifyMe("breakEnd");
+      }
       
-      notifyMe("breakEnd");
+      if(autoContinue)
+      {
+        renderInitialState();
+      }
       
       $("#timer").append(`<input type="button" id="continueTimerButton" value="Start Work">`);
       
@@ -220,6 +256,9 @@ function notifyMe(notificationType) {
           icon: 'img/bell.png',
           body: "Hey there! Take a break!",
         });
+        notification.onclick = function(){
+          alert("clicked");
+        }
         break;
       case "breakEnd":
         var notification = new Notification('Break Is Over', {
