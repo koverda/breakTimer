@@ -8,14 +8,17 @@ I wrote this timer to help take stretch breaks at work.
 To Do
 =====
 - make it pretty
-- more notification types 
-  - sound
-  - blink tab
 - host it
 - cookie 
   - save timer settings
   - save time left
-- refactor for less repetition
+- more notification types 
+  - sound
+  - blink tab
+  - email notification
+- refactor for less repetition / Object oriented
+- javascript only
+- typescript
 - suggestion box
 - donation box
 */
