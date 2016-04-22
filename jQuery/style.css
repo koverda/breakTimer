@@ -1,31 +1,106 @@
-#timer {
-    width: 300px;
-    height: 120px;
-    background-color: lightblue;
-
-    position: relative;
-    top:130;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    margin: auto;
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
     
-    font-family: sans-serif;
+    vertical-align: middle;
+    text-align: center
+}
+#headerBar {
+    height: 40px;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    text-align: center;
+
+}
+.option {
+    display: table-cell;
+    vertical-align: middle;
+    /*background: #eeeeee;*/
+    border: 1px solid lightgray;
+    border-left: none;
+    
+    border-right: 1px solid lightgray;
+
+}
+.optionText {
+display: inline-block;
 }
 
+.on i{
+    color: black;    
+}
+
+i {
+  padding: 5px;
+  color: lightgray;
+}
+
+@media (max-width: 600px) {
+  .optionText
+  {
+   display: none;
+  }
+}
+
+
 #options {
-    width: 300px;
-    /*height: 300px;*/
-    background-color: lightgray;
+    width:  100%;
 
-    position: relative;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    margin: 0 auto;
+}
 
-    margin: auto;
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    display: table;
+    table-layout: fixed;
+    font-size: 25px;
+}
+
+.timerCell{
+    display: table-cell;
+    background-color: white;
+    border-top: none;
+    border-left: none;
+    font-size: 15px;
+}
+ 
+ #workTimer .timercell{
+    color:  darkgray;
+    font-size: 40px;
     
-    font-family: sans-serif;
+}
+#workTimer .timerCell .seconds{
+    font-size: 100px;
+}
+
+#workTimer .timerCell .minutes{
+    font-size: 60px;
+}
+
+#workTimer .timercell .key{
+    color:  red;
+    font-size: 40px;    
+}
+
+#breakTimer .timercell{
+    color:  darkgray;
+    font-size: 40px;
+    
+}
+#breakTimer .timerCell .seconds{
+    font-size: 60px;
+}
+
+#breakTimer .timerCell .minutes{
+    font-size: 60px;
+}
+
+#breakTimer .timercell .key{
+    color:  red;
+    font-size: 40px;    
 }

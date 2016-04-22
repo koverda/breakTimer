@@ -32,8 +32,28 @@ var notifications = true;
 var closeWindowConfirmation = false;
 var autoContinue = false;
 
+navigator.serviceWorker.register('sw.js');
 
+console.log("1");
+Notification.requestPermission(function(result) {
 
+console.log("2");
+  if (result === 'granted') {
+    console.log("3");
+    navigator.serviceWorker.ready.then(function(registration) {
+      console.log("4");
+      registration.showNotification('Notification with ServiceWorker');
+    });
+  }
+});
+
+// this is to prevent closing the window on accident
+window.onbeforeunload = function(e) {
+  if (closeWindowConfirmation)
+  {
+    return 'You will lose your break timer! ';
+  }
+};
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -55,47 +75,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
     };
   }
   
+renderOptions();
 renderInitialState();
     
 });
 
+function renderOptions(){
+    console.log("rendering options");
+    $("#options").html(`
+    Options <br>
+    <input id="cboxNotification" type="checkbox" ` + (notifications?"checked":"")  +` onchange="notifications=!notifications;"/> Desktop Notification <br>
+    <input id="cboxWindowClose"  type="checkbox" ` + (closeWindowConfirmation?"checked":"")  +` onchange="closeWindowConfirmation=!closeWindowConfirmation;"/> Close Window Confirmation <br>
+    <input id="cboxAutoContinue" type="checkbox" ` + (autoContinue?"checked":"")  +` onchange="autoContinue=!autoContinue;"/> Auto Continue <br>
+    `);
+}
 
- $( document ).ready(function (){
-  $('.option').on('click',function () {
-    if ($(this).hasClass('on'))
-    {
-      $(this).removeClass('on');
-      console.log("removed");
-    }
-    else {
-      $(this).addClass('on');
-      console.log("added");
-    }
-    notifications = $("#o1").hasClass('on');
-    autoContinue = $("#o2").hasClass('on'); 
-    closeWindowConfirmation = $("#o3").hasClass('on');
-  });
-});
-
-// function renderOptions(){
-//     console.log("rendering options");
-//     $("#options").html(`
-//     Options <br>
-//     <input id="cboxNotification" type="checkbox" ` + (notifications?"checked":"")  +` onchange="notifications=!notifications;"/> Desktop Notification <br>
-//     <input id="cboxWindowClose"  type="checkbox" ` + (closeWindowConfirmation?"checked":"")  +` onchange="closeWindowConfirmation=!closeWindowConfirmation;"/> Close Window Confirmation <br>
-//     <input id="cboxAutoContinue" type="checkbox" ` + (autoContinue?"checked":"")  +` onchange="autoContinue=!autoContinue;"/> Auto Continue <br>
-//     `);
-// }
-
-// this is to prevent closing the window on accident
-window.onbeforeunload = function(e) {
-  console.log("before unload");
-  if (closeWindowConfirmation)
-  {
-    console.log("notification is on");
-    return 'You will lose your break timer! ';
-  }
-};
 
 function renderInitialState() {
   clearInterval(timer);
@@ -271,6 +265,8 @@ function notifyMe(notificationType) {
 
   if (Notification.permission !== "granted")
     Notification.requestPermission();
+    
+    
   else {
     switch(notificationType) {
       case "breakStart":
