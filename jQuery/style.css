@@ -2,53 +2,44 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
-    
     vertical-align: middle;
-    text-align: center
+    text-align: center;
 }
+
 #headerBar {
     height: 40px;
     width: 100%;
     display: table;
     table-layout: fixed;
     text-align: center;
-
 }
+
 .option {
     display: table-cell;
     vertical-align: middle;
-    /*background: #eeeeee;*/
     border: 1px solid lightgray;
     border-left: none;
-    
     border-right: 1px solid lightgray;
-
 }
+
 .optionText {
-display: inline-block;
+    display: inline-block;
 }
 
-.on i{
+.on i {
     color: black;    
 }
 
 i {
-  padding: 5px;
-  color: lightgray;
+    padding: 5px;
+    color: lightgray;
 }
 
 @media (max-width: 600px) {
-  .optionText
-  {
-   display: none;
-  }
-}
-
-
-#options {
-    width:  100%;
-
-    margin: 0 auto;
+    .optionText
+    {
+        display: none;
+    }
 }
 
 .container {
@@ -58,49 +49,53 @@ i {
     transform: translateX(-50%) translateY(-50%);
     display: table;
     table-layout: fixed;
-    font-size: 25px;
 }
 
-.timerCell{
+.timerCell {
     display: table-cell;
-    background-color: white;
-    border-top: none;
-    border-left: none;
-    font-size: 15px;
 }
- 
- #workTimer .timercell{
-    color:  darkgray;
+
+.workTimer {
+    border-bottom: 1px solid gray;
+}
+
+.workTimer .title {
     font-size: 40px;
-    
 }
-#workTimer .timerCell .seconds{
+
+.workTimer .timerCell .key {
+    font-size: 30px;
+}
+
+.workTimer .timeDisplay {
+    color:  black;
     font-size: 100px;
 }
 
-#workTimer .timerCell .minutes{
-    font-size: 60px;
+
+.breakTimer {
+    display: inline-block;
+    margin-left: auto;
 }
 
-#workTimer .timercell .key{
-    color:  red;
-    font-size: 40px;    
+.breakTimer .title{
+    font-size: 30px;
 }
 
-#breakTimer .timercell{
-    color:  darkgray;
-    font-size: 40px;
-    
-}
-#breakTimer .timerCell .seconds{
-    font-size: 60px;
+.breakTimer .timerCell .key
+{
+    font-size: 20px;
 }
 
-#breakTimer .timerCell .minutes{
-    font-size: 60px;
+.breakTimer .timeDisplay{
+    font-size: 80px;
 }
 
-#breakTimer .timercell .key{
-    color:  red;
-    font-size: 40px;    
+.breakTimer {
+    color: gray;
+    border-bottom: 1px solid darkgray;
+}
+
+.spacer {
+    height: 40px;
 }
