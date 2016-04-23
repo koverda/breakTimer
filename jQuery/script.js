@@ -31,8 +31,8 @@ var timer = setInterval(function(){});
 var notifications = true;
 var closeWindowConfirmation = false;
 var autoContinue = false;
-
-
+var workInput;
+var breakInput;
 
 
 
@@ -61,6 +61,7 @@ renderInitialState();
 
 
  $( document ).ready(function (){
+  
   $('.option').on('click',function () {
     if ($(this).hasClass('on'))
     {
@@ -75,7 +76,52 @@ renderInitialState();
     autoContinue = $("#o2").hasClass('on'); 
     closeWindowConfirmation = $("#o3").hasClass('on');
   });
+  
+   $('.workTimerDisplay').on('click',function() {
+      $('#inputWork').focus();
+  });   
+  
+   $('.breakTimerDisplay').on('click',function() {
+      $('#inputBreak').focus();
+  });   
+
+  
+//  $('inputWork').oninput = function () {
+//    console.log("inputting");
+//     if (this.value.length > 4) {
+//         this.value = this.value.slice(0,4); 
+//     };
+// };
+
+  document.getElementById("inputWork").oninput =  function () {
+    updateWorkTimeDisplay(this);
+  };
+   
+  document.getElementById("inputBreak").oninput =  function () {
+    updateBreakTimeDisplay(this);
+  };
+  
 });
+
+function updateWorkTimeDisplay(obj) {
+  if (obj.value.length > 4) {
+    obj.value = obj.value.slice(1,5); 
+  };
+  
+  workInput = obj.value;
+  $('.workTimerDisplay .seconds').text(workInput.slice(2,4));
+  $('.workTimerDisplay .minutes').text(workInput.slice(0,2));
+};
+
+function updateBreakTimeDisplay(obj) {
+  if (obj.value.length > 4) {
+    obj.value = obj.value.slice(1,5); 
+  };
+  
+  breakInput = obj.value;
+  $('.breakTimerDisplay .seconds').text(breakInput.slice(2,4));
+  $('.breakTimerDisplay .minutes').text(breakInput.slice(0,2));
+};
 
 // function renderOptions(){
 //     console.log("rendering options");
