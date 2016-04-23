@@ -79,19 +79,14 @@ renderInitialState();
   
    $('.workTimerDisplay').on('click',function() {
       $('#inputWork').focus();
+      $('#ws').addClass('entryBlink');
+      
   });   
   
    $('.breakTimerDisplay').on('click',function() {
       $('#inputBreak').focus();
+      $('#bs').addClass('entryBlink');
   });   
-
-  
-//  $('inputWork').oninput = function () {
-//    console.log("inputting");
-//     if (this.value.length > 4) {
-//         this.value = this.value.slice(0,4); 
-//     };
-// };
 
   document.getElementById("inputWork").oninput =  function () {
     updateWorkTimeDisplay(this);
@@ -101,7 +96,17 @@ renderInitialState();
     updateBreakTimeDisplay(this);
   };
   
+  $('#inputWork').blur( function (){
+    $('#ws').removeClass('entryBlink');
+  });
+  
+  $('#inputBreak').blur( function (){
+    $('#bs').removeClass('entryBlink');
+  });
+  
 });
+
+
 
 function updateWorkTimeDisplay(obj) {
   if (obj.value.length > 4) {

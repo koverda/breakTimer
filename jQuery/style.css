@@ -99,3 +99,14 @@ i {
 .spacer {
     height: 40px;
 }
+
+.entryBlink{
+    border-right: 1px  solid transparent;
+    animation: blink .5s step-end infinite alternate;
+    
+}
+
+
+@keyframes blink { 
+   50% { border-color: black; } 
+}
