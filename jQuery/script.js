@@ -63,6 +63,7 @@ renderInitialState();
  $( document ).ready(function (){
   
   $('.option').on('click',function () {
+      console.log("clicked");
     if ($(this).hasClass('on'))
     {
       $(this).removeClass('on');
@@ -128,15 +129,6 @@ function updateBreakTimeDisplay(obj) {
   $('.breakTimerDisplay .minutes').text(breakInput.slice(0,2));
 };
 
-// function renderOptions(){
-//     console.log("rendering options");
-//     $("#options").html(`
-//     Options <br>
-//     <input id="cboxNotification" type="checkbox" ` + (notifications?"checked":"")  +` onchange="notifications=!notifications;"/> Desktop Notification <br>
-//     <input id="cboxWindowClose"  type="checkbox" ` + (closeWindowConfirmation?"checked":"")  +` onchange="closeWindowConfirmation=!closeWindowConfirmation;"/> Close Window Confirmation <br>
-//     <input id="cboxAutoContinue" type="checkbox" ` + (autoContinue?"checked":"")  +` onchange="autoContinue=!autoContinue;"/> Auto Continue <br>
-//     `);
-// }
 
 // this is to prevent closing the window on accident
 window.onbeforeunload = function(e) {

@@ -26,13 +26,13 @@ html, body {
     display: inline-block;
 }
 
-.on i {
-    color: black;    
-}
-
-i {
+.option i {
     padding: 5px;
     color: lightgray;
+}
+
+.on i {
+    color: black;
 }
 
 @media (max-width: 600px) {
@@ -109,4 +109,38 @@ i {
 
 @keyframes blink { 
    50% { border-color: black; } 
+}
+
+.hidden {
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    z-index: -2;
+    opacity: 0;
+}
+
+.buttons {
+    height: 30px;
+    display: table;
+    table-layout: fixed;
+    margin: auto;
+}
+
+.buttons .button {
+    display: table-cell;
+    width: 70px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.buttons .button:hover {
+    border-bottom: 1px solid darkgray;
+}
+
+.buttons .button:active {
+    border-bottom: 1px solid black;
+}
+
+.button i {
+    color: black; 
 }
