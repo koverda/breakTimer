@@ -31,8 +31,8 @@ var timer = setInterval(function(){});
 var notifications = true;
 var closeWindowConfirmation = false;
 var autoContinue = false;
-var workInput;
-var breakInput;
+var workInput = 0;
+var breakInput = 0;
 
 
 
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     };
   }
   
-renderInitialState();
+//renderInitialState();
     
 });
 
@@ -105,10 +105,27 @@ renderInitialState();
     $('#bs').removeClass('entryBlink');
   });
   
+  $("#startButton").click( function() { 
+    console.log("startButton clicked");
+    //store inputs
+    timerLength = workInput;
+    breakLength = breakInput;
+    
+    console.log("timerLength: " + timerLength);
+    console.log("breakLength: " + breakLength);
+    
+    //store original values
+    originalTimerLength = timerLength;
+    originalBreakLength = breakLength;
+          
+    //renderActiveState();
+  });
+  
 });
 
 
 
+// changing the time inputs
 function updateWorkTimeDisplay(obj) {
   if (obj.value.length > 4) {
     obj.value = obj.value.slice(1,5); 
@@ -130,6 +147,9 @@ function updateBreakTimeDisplay(obj) {
 };
 
 
+
+
+
 // this is to prevent closing the window on accident
 window.onbeforeunload = function(e) {
   console.log("before unload");
@@ -139,6 +159,10 @@ window.onbeforeunload = function(e) {
     return 'You will lose your break timer! ';
   }
 };
+
+
+
+
 
 function renderInitialState() {
   clearInterval(timer);
@@ -152,16 +176,17 @@ function renderInitialState() {
     <input type="button" id="startTimerButton" value="Start">
   `);
 
-  $("#startTimerButton").click( function() { 
+  $("#startButton").click( function() { 
+    console.log("startButton clicked");
     //store inputs
-    timerLength = parseInt($("#timerLengthInput").val());
-    breakLength = parseInt($("#breakLengthInput").val());
+    timerLength = workInput;
+    breakLength = breakInput;
     
     //store original values
     originalTimerLength = timerLength;
     originalBreakLength = breakLength;
           
-    renderActiveState();
+    //renderActiveState();
   });
 }
 
@@ -193,11 +218,11 @@ function renderActiveState() {
       
       if(autoContinue)
       {
-        renderBreakState();
+        //renderBreakState();
       }
       
       $("#continueTimerButton").click( function() { 
-        renderBreakState();
+        //renderBreakState();
       });
       
     };
@@ -206,12 +231,12 @@ function renderActiveState() {
   $("#pauseTimerButton").click( function() { 
     // pause timer
     clearInterval(timer);
-    renderPausedState("activeState");
+    //renderPausedState("activeState");
   });
   
   
   $("#resetTimerButton").click( function() { 
-    renderInitialState();
+    //renderInitialState();
   });
 }
 
@@ -229,12 +254,12 @@ $("#timer").html(`
   if (pauseCaller == "breakState") $("#timeLeftDisplay").html(breakLength);
   
   $("#resumeTimerButton").click( function() { 
-    if (pauseCaller == "activeState") renderActiveState();
-    if (pauseCaller == "breakState") renderBreakState();
+    //if (pauseCaller == "activeState") renderActiveState();
+    //if (pauseCaller == "breakState") renderBreakState();
   });
   
   $("#resetTimerButton").click( function() { 
-    renderInitialState();
+    //renderInitialState();
   });
 }
 
@@ -266,13 +291,13 @@ $("#timer").html(`
       
       if(autoContinue)
       {
-        renderInitialState();
+        //renderInitialState();
       }
       
       $("#timer").append(`<input type="button" id="continueTimerButton" value="Start Work">`);
       
       $("#continueTimerButton").click( function() { 
-        renderInitialState();
+        //renderInitialState();
       });
       
     };
@@ -281,11 +306,11 @@ $("#timer").html(`
   $("#pauseTimerButton").click( function() { 
     // pause timer
     clearInterval(timer);
-    renderPausedState("breakState");
+    //renderPausedState("breakState");
   });
   
   $("#resetTimerButton").click( function() { 
-    renderInitialState();
+    //renderInitialState();
   });
 }
 
@@ -301,7 +326,7 @@ function renderFinalState() {
   $("#startTimerButton").click( function() { 
     timerLength = parseInt($("#timerLengthInput").val());
     breakLength = parseInt($("#breakLengthInput").val());   
-    renderActiveState();
+    //renderActiveState();
   });
 }
 

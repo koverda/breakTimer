@@ -17,9 +17,19 @@ html, body {
 .option {
     display: table-cell;
     vertical-align: middle;
-    border: 1px solid lightgray;
+    border-bottom: 1px solid #cccccc;
+    /*border: 1px solid transparent;
     border-left: none;
-    border-right: 1px solid lightgray;
+    border-right: 1px solid transparent;*/
+}
+
+.option:hover{
+    border-bottom: 2px solid darkgray;
+}
+
+
+.option:active {
+    border-bottom: 2px solid black;
 }
 
 .optionText {
@@ -96,6 +106,14 @@ html, body {
     border-bottom: 1px solid darkgray;
 }
 
+#ws{
+    border-right: 1px  solid transparent;
+}
+
+#bs{
+    border-right: 1px  solid transparent;
+}
+
 .spacer {
     height: 40px;
 }
@@ -131,6 +149,7 @@ html, body {
     width: 70px;
     text-align: center;
     vertical-align: middle;
+    border-bottom: 1px solid transparent;
 }
 
 .buttons .button:hover {
