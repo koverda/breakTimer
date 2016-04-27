@@ -120,13 +120,20 @@ html, body {
 
 .entryBlink{
     border-right: 1px  solid transparent;
-    animation: blink .5s step-end infinite alternate;
-    
+    animation: blinkBorder .5s step-end infinite alternate;
 }
 
+.buttonBlink{
+    color: black;
+    animation: blinkColor .5s step-end infinite alternate;
+}
 
-@keyframes blink { 
+@keyframes blinkBorder { 
    50% { border-color: black; } 
+}
+
+@keyframes blinkColor { 
+   50% { color: grey; } 
 }
 
 .hidden {

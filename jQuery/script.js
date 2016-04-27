@@ -9,6 +9,7 @@ To Do
 =====
 - make it pretty
 - host it
+- invert color scheme
 - cookie 
   - save timer settings
   - save time left
@@ -23,7 +24,7 @@ To Do
 */
 
 
-var timerLength = 0;
+var workLength = 0;
 var breakLength = 0;
 var orginalTimerLength = 0;
 var originalBreakLength = 0;
@@ -33,13 +34,14 @@ var closeWindowConfirmation = false;
 var autoContinue = false;
 var workInput = 0;
 var breakInput = 0;
+var workTime = true;
 
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
 
-  timerLength = 0;
+  workLength = 0;
   breakLength = 0;
   
   if (notifications)
@@ -60,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 
- $( document ).ready(function (){
+$( document ).ready(function (){
   
   $('.option').on('click',function () {
       console.log("clicked");
@@ -78,10 +80,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     closeWindowConfirmation = $("#o3").hasClass('on');
   });
   
+  // timer input effects
    $('.workTimerDisplay').on('click',function() {
       $('#inputWork').focus();
       $('#ws').addClass('entryBlink');
-      
   });   
   
    $('.breakTimerDisplay').on('click',function() {
@@ -105,30 +107,87 @@ document.addEventListener("DOMContentLoaded", function(event) {
     $('#bs').removeClass('entryBlink');
   });
   
-  $("#startButton").click( function() { 
-    console.log("startButton clicked");
-    //store inputs
-    timerLength = workInput;
-    breakLength = breakInput;
+  $('#startButton').click( function() { 
+    if($('#startButton').find('i').hasClass('buttonBlink')){
+      $('#startButton').find('i').removeClass('buttonBlink');
+    }
+    startTimerCount();
+  });
+  
+  $('#pauseButton').click( function() { 
+    clearInterval(timer);
+  });
+  
+  $('#inputBreak').focus(function(){
+    this.value = this.value;
+  });
     
-    console.log("timerLength: " + timerLength);
-    console.log("breakLength: " + breakLength);
-    
-    //store original values
-    originalTimerLength = timerLength;
-    originalBreakLength = breakLength;
-          
-    //renderActiveState();
+  $('#inputWork').focus(function(){
+    this.value = this.value;
   });
   
 });
 
 
+function startTimerCount(){
+    console.log("startButton clicked");
+    // store inputs converted to seconds
+    workLength = (parseInt(workInput.toString().slice(0,2)) * 60) + parseInt(workInput.toString().slice(2,4));
+    breakLength = breakInput.toString().slice(0,2) * 60 + breakInput.toString().slice(2,4);
+        
+    // store original values
+    originalTimerLength = workLength;
+    originalBreakLength = breakLength;
+    
+    // start countdown
+    timer = setInterval(function(){
+      if(workTime) {
+        workLength--;
+        workCountdownTime(workLength);
+        if(workLength <= 0) {
+          clearInterval(timer);
+          workTime = false; //work is over, break time!
+          if (notifications) {
+            notifyMe("breakStart");
+          }
+          $('#startButton').find('i').addClass('buttonBlink');
+        }
+      }
+      else {
+        breakLength--;
+        breakCountdownTime(breakLength);
+        if(breakLength <= 0) {
+          clearInterval(timer);
+          workTime = true; //break is over, work time!
+          if (notifications) {
+            notifyMe("breakEnd");
+          }          
+        }
+      }
+      
+    }, 1000);
+};
+
+
+// changing time display during countdown
+function workCountdownTime(workLength){
+  $("#ws").text(pad2(workLength % 60));
+  $("#wm").text(pad2(Math.floor(workLength / 60)));
+};
+
+function breakCountdownTime(breakLength){
+  $("#bs").text(pad2(breakLength % 60));
+  $("#bm").text(pad2(Math.floor(breakLength / 60)));
+};
 
 // changing the time inputs
-function updateWorkTimeDisplay(obj) {
+function updateWorkTimeDisplay(obj) {  
   if (obj.value.length > 4) {
-    obj.value = obj.value.slice(1,5); 
+    obj.value = obj.value.slice(1,5);
+  };
+  
+  if (obj.value.length < 4) {
+    obj.value = pad4(obj.value); 
   };
   
   workInput = obj.value;
@@ -141,14 +200,14 @@ function updateBreakTimeDisplay(obj) {
     obj.value = obj.value.slice(1,5); 
   };
   
+  if (obj.value.length < 4) {
+    obj.value = pad4(obj.value); 
+  };
+  
   breakInput = obj.value;
   $('.breakTimerDisplay .seconds').text(breakInput.slice(2,4));
   $('.breakTimerDisplay .minutes').text(breakInput.slice(0,2));
 };
-
-
-
-
 
 // this is to prevent closing the window on accident
 window.onbeforeunload = function(e) {
@@ -159,10 +218,6 @@ window.onbeforeunload = function(e) {
     return 'You will lose your break timer! ';
   }
 };
-
-
-
-
 
 function renderInitialState() {
   clearInterval(timer);
@@ -179,17 +234,16 @@ function renderInitialState() {
   $("#startButton").click( function() { 
     console.log("startButton clicked");
     //store inputs
-    timerLength = workInput;
+    workLength = workInput;
     breakLength = breakInput;
     
     //store original values
-    originalTimerLength = timerLength;
+    originalTimerLength = workLength;
     originalBreakLength = breakLength;
           
     //renderActiveState();
   });
 }
-
 
 function renderActiveState() {
   $("#timer").html(`
@@ -200,13 +254,13 @@ function renderActiveState() {
           <input type="button" id="resetTimerButton" value="Reset">
   `);
   
-  $("#timeLeftDisplay").html(timerLength);
+  $("#timeLeftDisplay").html(workLength);
   
   timer = setInterval(function(){
-    timerLength--;
-    $("#timeLeftDisplay").html(timerLength);
+    workLength--;
+    $("#timeLeftDisplay").html(workLength);
     
-    if (timerLength == 0)
+    if (workLength == 0)
     {
       clearInterval(timer);
       if (notifications)
@@ -240,7 +294,6 @@ function renderActiveState() {
   });
 }
 
-
 function renderPausedState(pauseCaller) {
 $("#timer").html(`
   paused <br>
@@ -250,7 +303,7 @@ $("#timer").html(`
           <input type="button" id="resetTimerButton" value="Reset">
   `);
   
-  if (pauseCaller == "activeState") $("#timeLeftDisplay").html(timerLength);
+  if (pauseCaller == "activeState") $("#timeLeftDisplay").html(workLength);
   if (pauseCaller == "breakState") $("#timeLeftDisplay").html(breakLength);
   
   $("#resumeTimerButton").click( function() { 
@@ -262,7 +315,6 @@ $("#timer").html(`
     //renderInitialState();
   });
 }
-
 
 function renderBreakState() {
 $("#timer").html(`
@@ -314,7 +366,6 @@ $("#timer").html(`
   });
 }
 
-
 function renderFinalState() {
   $("#timer").html(`
     final <br>
@@ -324,12 +375,11 @@ function renderFinalState() {
   `);
 
   $("#startTimerButton").click( function() { 
-    timerLength = parseInt($("#timerLengthInput").val());
+    workLength = parseInt($("#timerLengthInput").val());
     breakLength = parseInt($("#breakLengthInput").val());   
     //renderActiveState();
   });
 }
-
 
 function notifyMe(notificationType) {
   if (!Notification) {
@@ -344,19 +394,34 @@ function notifyMe(notificationType) {
       case "breakStart":
         var notification = new Notification('Break Time', {
           icon: 'img/bell.png',
-          body: "Hey there! Take a break!",
+          body: "Click to start break",
         });
-        // notification.onclick = function(){
-        //   alert("clicked");
-        // }
+        notification.onclick = function(){
+          startTimerCount();
+          notification.close();
+        }
         break;
       case "breakEnd":
         var notification = new Notification('Break Is Over', {
           icon: 'img/briefcase.png',
           body: "Hey there! Break Is Over, back to work!",
         });  
+        notification.onclick = function(){
+          notification.close();
+        }
         break;    
     }
   }
+}
+
+function pad2(number) {
+     return (number < 10 ? '0' : '') + number;
+}
+
+function pad4(number) {
+     while(number.length < 4){
+       number = '0' + number;
+     } 
+     return number;
 }
 
