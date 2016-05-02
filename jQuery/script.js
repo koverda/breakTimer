@@ -35,6 +35,7 @@ var autoContinue = false;
 var workInput = 0;
 var breakInput = 0;
 var workTime = true;
+var timerActive = false;
 
 
 
@@ -82,13 +83,17 @@ $( document ).ready(function (){
   
   // timer input effects
    $('.workTimerDisplay').on('click',function() {
-      $('#inputWork').focus();
-      $('#ws').addClass('entryBlink');
+      if (timerActive == false) {
+        $('#inputWork').focus();
+        $('#ws').addClass('entryBlink');
+      }
   });   
   
    $('.breakTimerDisplay').on('click',function() {
-      $('#inputBreak').focus();
-      $('#bs').addClass('entryBlink');
+     if (timerActive == false) {
+       $('#inputBreak').focus();
+       $('#bs').addClass('entryBlink');
+     }
   });   
 
   document.getElementById("inputWork").oninput =  function () {
@@ -116,6 +121,8 @@ $( document ).ready(function (){
   
   $('#pauseButton').click( function() { 
     clearInterval(timer);
+    timerActive = false;
+    
   });
   
   $('#inputBreak').focus(function(){
@@ -130,42 +137,60 @@ $( document ).ready(function (){
 
 
 function startTimerCount(){
-    console.log("startButton clicked");
-    // store inputs converted to seconds
     workLength = (parseInt(workInput.toString().slice(0,2)) * 60) + parseInt(workInput.toString().slice(2,4));
     breakLength = breakInput.toString().slice(0,2) * 60 + breakInput.toString().slice(2,4);
-        
+    
+    if(!workLength) {
+      workLength = 0;
+    }
+    if(!breakLength) {
+      breakLength = 0;
+    }    
+    
     // store original values
     originalTimerLength = workLength;
     originalBreakLength = breakLength;
+      
     
     // start countdown
-    timer = setInterval(function(){
-      if(workTime) {
-        workLength--;
-        workCountdownTime(workLength);
-        if(workLength <= 0) {
-          clearInterval(timer);
-          workTime = false; //work is over, break time!
-          if (notifications) {
-            notifyMe("breakStart");
+    if (timerActive == false) {
+      timer = setInterval(function(){
+        timerActive = true;
+        if(workTime) {
+          if(workLength <= 0) {          
+            clearInterval(timer);
+            workTime = false; //work is over, break time!
+            if (notifications) {
+              notifyMe("breakStart");
+            }
+            $('#startButton').find('i').addClass('buttonBlink');
+            timerActive = false;
           }
-          $('#startButton').find('i').addClass('buttonBlink');
+          else { 
+            workLength--;
+            workCountdownTime(workLength);
+            document.getElementById("inputWork").value = $('#wm').text()+$('#ws').text();
+            workInput  = $('#wm').text()+$('#ws').text();
+          }
         }
-      }
-      else {
-        breakLength--;
-        breakCountdownTime(breakLength);
-        if(breakLength <= 0) {
-          clearInterval(timer);
-          workTime = true; //break is over, work time!
-          if (notifications) {
-            notifyMe("breakEnd");
-          }          
+        else { //break time
+          if(breakLength <= 0) {
+            console.log("breakLength <= 0");
+            clearInterval(timer);
+            workTime = true; //break is over, work time!
+            if (notifications) {
+              notifyMe("breakEnd");
+            }
+            $('#startButton').find('i').addClass('buttonBlink');
+            timerActive = false;
+          }
+          else {
+            breakLength--;
+            breakCountdownTime(breakLength);
+          }
         }
-      }
-      
-    }, 1000);
+      }, 1000);
+    }
 };
 
 
