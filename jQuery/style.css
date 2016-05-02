@@ -136,13 +136,13 @@ html, body {
    50% { color: grey; } 
 }
 
-/*.hidden {
+.hidden {
     height: 0px;
     width: 0px;
     position: absolute;
     z-index: -2;
     opacity: 0;
-}*/
+}
 
 .buttons {
     height: 30px;

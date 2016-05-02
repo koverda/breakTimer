@@ -122,7 +122,6 @@ $( document ).ready(function (){
   $('#pauseButton').click( function() { 
     clearInterval(timer);
     timerActive = false;
-    
   });
   
   $('#inputBreak').focus(function(){
@@ -187,6 +186,8 @@ function startTimerCount(){
           else {
             breakLength--;
             breakCountdownTime(breakLength);
+            document.getElementById("inputBreak").value = $('#bm').text()+$('#bs').text();
+            breakInput  = $('#bm').text()+$('#bs').text();
           }
         }
       }, 1000);
