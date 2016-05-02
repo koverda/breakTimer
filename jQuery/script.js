@@ -138,7 +138,7 @@ $( document ).ready(function (){
 
 function startTimerCount(){
     workLength = (parseInt(workInput.toString().slice(0,2)) * 60) + parseInt(workInput.toString().slice(2,4));
-    breakLength = breakInput.toString().slice(0,2) * 60 + breakInput.toString().slice(2,4);
+    breakLength = (parseInt(breakInput.toString().slice(0,2)) * 60) + parseInt(breakInput.toString().slice(2,4));
     
     if(!workLength) {
       workLength = 0;
